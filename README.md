@@ -25,6 +25,7 @@ surfheaven
 ```sql
 CREATE TABLE `records_sh` (
     `id` varchar(255) NOT NULL,
+    `timestamp` timestamp,
     `player_name` varchar(255),
     `player_id` varchar(255),
     `type` varchar(255),
