@@ -9,7 +9,7 @@
 ```sql
 CREATE DATABASE surfdb;
 CREATE USER 'db'@'localhost' IDENTIFIED BY 'password';
-GRANT INSERT on surfdb.* TO 'db'@'localhost' WITH GRANT OPTION;
+GRANT SELECT, INSERT on surfdb.* TO 'db'@'localhost' WITH GRANT OPTION;
 ```
 
 #### Create tables

@@ -11,7 +11,7 @@ mydb = mysql.connector.connect(
     database="surfdb"
 )
 
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(buffered=True)
 
 discord_auth = os.environ['DISCORD_AUTH']
 
@@ -21,9 +21,9 @@ headers = {
     'authorization': discord_auth}
 
 
-def get_channel(channel_id, before=""):
+def get_channel(channel_id, before="", after=""):
     r = requests.get(
-        f'{discord_base_url}/{channel_id}/messages?limit=50{"&before="+before if before != "" else ""}', headers=headers)
+        f'{discord_base_url}/{channel_id}/messages?limit=50{"&before="+before if before != "" else ""}{"&after="+after if after != "" else ""}', headers=headers)
     return r.json()
 
 
@@ -111,4 +111,34 @@ def get_surfheaven():
         i += 50
 
 
-get_surfheaven()
+def get_new_sh():
+    surfheaven_id = '525673064189526017'
+
+    last_id = ''
+
+    # get newest record in DB
+    mycursor.execute("SELECT id FROM records_sh ORDER BY timestamp DESC")
+    after = mycursor.fetchone()[0]
+
+    while True:
+        req = get_channel(channel_id=surfheaven_id, after=after)
+        val = []
+        for record in req:
+            record = sh_record(record)
+            if record:
+                val.append(record)
+                last_id = record[0]
+
+        sql = "INSERT IGNORE INTO records_sh (id, timestamp, player_name, player_id, type, track, map_name, time, improvement, server) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        mycursor.executemany(sql, val)
+        mydb.commit()
+
+        if last_id == after or len(req) == 0:
+            break
+        after = last_id
+
+
+# get_surfheaven()
+
+
+get_new_sh()
