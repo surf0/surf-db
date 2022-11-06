@@ -1,0 +1,50 @@
+definitions:
+  models.Record:
+    properties:
+      id:
+        type: string
+      improvement:
+        type: string
+      map_name:
+        type: string
+      player_id:
+        type: string
+      player_name:
+        type: string
+      server:
+        type: string
+      time:
+        type: string
+      timestamp:
+        type: string
+      track:
+        type: integer
+      type:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: 'CS:GO & CS:S surf record and map data. Github: https://github.com/surf0/surf-db'
+  title: Surf DB API
+  version: "1.0"
+paths:
+  /records/map/{mapname}:
+    get:
+      operationId: get-records-map
+      parameters:
+      - description: map name
+        in: path
+        name: mapname
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Record'
+            type: array
+      summary: get all records for map by map name
+swagger: "2.0"

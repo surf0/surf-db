@@ -1,0 +1,77 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "CS:GO \u0026 CS:S surf record and map data. Github: https://github.com/surf0/surf-db",
+        "title": "Surf DB API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "paths": {
+        "/records/map/{mapname}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "get all records for map by map name",
+                "operationId": "get-records-map",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "map name",
+                        "name": "mapname",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Record"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Record": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "improvement": {
+                    "type": "string"
+                },
+                "map_name": {
+                    "type": "string"
+                },
+                "player_id": {
+                    "type": "string"
+                },
+                "player_name": {
+                    "type": "string"
+                },
+                "server": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "string"
+                },
+                "track": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
