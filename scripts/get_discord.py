@@ -1,14 +1,21 @@
 import requests
 import os
 import re
-import json
+
+import mysql.connector
+
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="db",
+    password="password",
+    database="surfdb"
+)
+
+mycursor = mydb.cursor()
 
 discord_auth = os.environ['DISCORD_AUTH']
 
 discord_base_url = 'https://discord.com/api/v9/channels/'
-
-
-data = []
 
 headers = {
     'authorization': discord_auth}
@@ -46,9 +53,11 @@ def get_surfheaven():
 
     last_id = ''
     before = ''
+    i = 0
 
     while True:
         req = get_channel(channel_id=surfheaven_id, before=before)
+        val = []
         for record in req:
             try:
                 date = record['embeds'][0]['timestamp']
@@ -80,28 +89,20 @@ def get_surfheaven():
             server = re.search(r"on server .+", value)
             server = server.group()[10:] if server else ""
 
-            data.append({'record_id': record['id'],
-                        'date': date,
-                         'player_name': player_name,
-                         'player_id': player_id,
-                         'type': map_type,
-                         'track': map_track,
-                         'map_name': map_name,
-                         'time': time,
-                         'time_improvement': time_improvement,
-                         'server': server
-                         })
+            val.append((record['id'], player_name, player_id, map_type,
+                       map_track, map_name, time, time_improvement, server))
             last_id = record['id']
+        sql = "INSERT IGNORE INTO records_sh (id, player_name, player_id, type, track, map_name, time, improvement, server) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        mycursor.executemany(sql, val)
 
-        print(len(data))
+        mydb.commit()
+
+        print(i)
         print(before)
         if last_id == before:
             break
-        else:
-            before = last_id
-
-    with open('scripts/surfheaven.json', 'w') as f:
-        json.dump(data, f)
+        before = last_id
+        i += 50
 
 
 get_surfheaven()
