@@ -136,9 +136,3 @@ def get_new_sh():
         if last_id == after or len(req) == 0:
             break
         after = last_id
-
-
-# get_surfheaven()
-
-
-get_new_sh()
