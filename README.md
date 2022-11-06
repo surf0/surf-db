@@ -2,6 +2,14 @@
 
 ## Get started
 
+### Discord Auth
+
+From discord `authorization` header set:
+
+```bash
+export DISCORD_AUTH="<auth>"
+```
+
 ### SQL Setup
 
 #### Create database and user
