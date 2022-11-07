@@ -6,14 +6,18 @@
         "contact": {},
         "version": "1.0"
     },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
     "paths": {
-        "/records/map/{mapname}": {
+        "/sh/records/map/{mapname}": {
             "get": {
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "surfheaven"
+                ],
                 "summary": "get all records for map by map name",
-                "operationId": "get-records-map",
                 "parameters": [
                     {
                         "type": "string",

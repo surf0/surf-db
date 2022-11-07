@@ -14,7 +14,7 @@ const dbUser = "db"
 const dbPass = "password"
 const dbName = "surfdb"
 
-func GetRecordsByMapName(mapName string) []models.Record {
+func GetRecordsByMapNameSH(mapName string) []models.Record {
 	db, err := sql.Open("mysql", dbUser+":"+dbPass+"@tcp(localhost:3306)/"+dbName)
 
 	records := []models.Record{} 

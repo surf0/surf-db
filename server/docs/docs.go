@@ -16,13 +16,15 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/records/map/{mapname}": {
+        "/sh/records/map/{mapname}": {
             "get": {
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "surfheaven"
+                ],
                 "summary": "get all records for map by map name",
-                "operationId": "get-records-map",
                 "parameters": [
                     {
                         "type": "string",
@@ -88,8 +90,8 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "",
-	BasePath:         "",
+	Host:             "localhost:8080",
+	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "Surf DB API",
 	Description:      "CS:GO & CS:S surf record and map data. Github: https://github.com/surf0/surf-db",

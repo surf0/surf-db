@@ -1,3 +1,4 @@
+basePath: /api/v1
 definitions:
   models.Record:
     properties:
@@ -22,15 +23,15 @@ definitions:
       type:
         type: string
     type: object
+host: localhost:8080
 info:
   contact: {}
   description: 'CS:GO & CS:S surf record and map data. Github: https://github.com/surf0/surf-db'
   title: Surf DB API
   version: "1.0"
 paths:
-  /records/map/{mapname}:
+  /sh/records/map/{mapname}:
     get:
-      operationId: get-records-map
       parameters:
       - description: map name
         in: path
@@ -47,4 +48,6 @@ paths:
               $ref: '#/definitions/models.Record'
             type: array
       summary: get all records for map by map name
+      tags:
+      - surfheaven
 swagger: "2.0"
