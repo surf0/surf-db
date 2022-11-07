@@ -77,5 +77,11 @@
                 }
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "description": "surfheaven.eu CS:GO surf servers",
+            "name": "surfheaven"
+        }
+    ]
 }

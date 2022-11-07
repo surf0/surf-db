@@ -18,6 +18,8 @@ import (
 // @description CS:GO & CS:S surf record and map data. Github: https://github.com/surf0/surf-db
 // @host      localhost:8080
 // @BasePath  /api/v1
+// @tag.name surfheaven
+// @tag.description surfheaven.eu CS:GO surf servers
 func main() {
 	router := gin.Default()
 	v1 := router.Group("/api/v1") 

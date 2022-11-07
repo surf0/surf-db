@@ -51,3 +51,6 @@ paths:
       tags:
       - surfheaven
 swagger: "2.0"
+tags:
+- description: surfheaven.eu CS:GO surf servers
+  name: surfheaven

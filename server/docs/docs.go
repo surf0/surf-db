@@ -84,7 +84,13 @@ const docTemplate = `{
                 }
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "description": "surfheaven.eu CS:GO surf servers",
+            "name": "surfheaven"
+        }
+    ]
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
