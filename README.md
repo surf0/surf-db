@@ -43,5 +43,5 @@ CREATE TABLE `records_sh` (
     `improvement` varchar(255),
     `server` varchar(255),
     PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
