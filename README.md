@@ -1,5 +1,7 @@
 # Surf DB
 
+[API Docs](https://api.surf0.net/docs/index.html)
+
 ## Get started
 
 ### Discord Auth
