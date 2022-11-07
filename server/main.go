@@ -28,7 +28,9 @@ func main() {
 		{
 			sh.GET("/records/map/:map", getRecordsByMapSH)
 			sh.GET("/records/stage/:map/:track", getRecordsByStageSH)
-			sh.GET("/records/stages/:map/", getRecordsStagesSH)
+			sh.GET("/records/stage/:map/", getRecordsStagesSH)
+			sh.GET("/records/bonus/:map/:track", getRecordsByBonusSH)
+			sh.GET("/records/bonus/:map/", getRecordsBonusesSH)
 		}
 	}
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -78,7 +80,7 @@ func getRecordsByStageSH(c *gin.Context) {
 // @Produce json
 // @Param mapname path string true "map name"
 // @Success 200 {array} models.Record
-// @Router /sh/records/stages/{mapname}/ [get]
+// @Router /sh/records/stage/{mapname}/ [get]
 func getRecordsStagesSH(c *gin.Context) {
     mapName := c.Param("map")
 
@@ -86,6 +88,44 @@ func getRecordsStagesSH(c *gin.Context) {
 
 	if records == nil {    
  	   c.JSON(http.StatusNotFound, gin.H{"error": "stage not found (only works for staged maps)"})
+	} else {
+		c.JSON(http.StatusOK, records)
+	}
+}
+
+// @Summary get all records for specific bonus
+// @Tags surfheaven
+// @Produce json
+// @Param mapname path string true "map name"
+// @Param bonus path string true "bonus e.g. 1, 2, ..."
+// @Success 200 {array} models.Record
+// @Router /sh/records/bonus/{mapname}/{bonus} [get]
+func getRecordsByBonusSH(c *gin.Context) {
+    mapName := c.Param("map")
+	track := c.Param("track")
+
+	records := controllers.GetRecordsByBonusSH(mapName, track)
+
+	if records == nil {    
+ 	   c.JSON(http.StatusNotFound, gin.H{"error": "bonus not found"})
+	} else {
+		c.JSON(http.StatusOK, records)
+	}
+}
+
+// @Summary get all records for all bonuses
+// @Tags surfheaven
+// @Produce json
+// @Param mapname path string true "map name"
+// @Success 200 {array} models.Record
+// @Router /sh/records/bonus/{mapname}/ [get]
+func getRecordsBonusesSH(c *gin.Context) {
+    mapName := c.Param("map")
+
+	records := controllers.GetRecordsBonusesSH(mapName)
+
+	if records == nil {    
+ 	   c.JSON(http.StatusNotFound, gin.H{"error": "bonuses not found"})
 	} else {
 		c.JSON(http.StatusOK, records)
 	}

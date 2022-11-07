@@ -16,6 +16,75 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/sh/records/bonus/{mapname}/": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "surfheaven"
+                ],
+                "summary": "get all records for all bonuses",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "map name",
+                        "name": "mapname",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Record"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sh/records/bonus/{mapname}/{bonus}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "surfheaven"
+                ],
+                "summary": "get all records for specific bonus",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "map name",
+                        "name": "mapname",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "bonus e.g. 1, 2, ...",
+                        "name": "bonus",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Record"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/sh/records/map/{mapname}": {
             "get": {
                 "produces": [
@@ -25,6 +94,37 @@ const docTemplate = `{
                     "surfheaven"
                 ],
                 "summary": "get all records for map by map name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "map name",
+                        "name": "mapname",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Record"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sh/records/stage/{mapname}/": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "surfheaven"
+                ],
+                "summary": "get all records for all stages",
                 "parameters": [
                     {
                         "type": "string",
@@ -68,37 +168,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "stage e.g. 1, 2, ...",
                         "name": "stage",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Record"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/sh/records/stages/{mapname}/": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "surfheaven"
-                ],
-                "summary": "get all records for all stages",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "map name",
-                        "name": "mapname",
                         "in": "path",
                         "required": true
                     }
