@@ -46,6 +46,75 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/sh/records/stage/{mapname}/{stage}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "surfheaven"
+                ],
+                "summary": "get all records for specific stage",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "map name",
+                        "name": "mapname",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "stage e.g. 1, 2, ...",
+                        "name": "stage",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Record"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sh/records/stages/{mapname}/": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "surfheaven"
+                ],
+                "summary": "get all records for all stages",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "map name",
+                        "name": "mapname",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Record"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

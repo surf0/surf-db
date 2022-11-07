@@ -27,6 +27,8 @@ func main() {
 		sh := v1.Group("/sh") 
 		{
 			sh.GET("/records/map/:map", getRecordsByMapSH)
+			sh.GET("/records/stage/:map/:track", getRecordsByStageSH)
+			sh.GET("/records/stages/:map/", getRecordsStagesSH)
 		}
 	}
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -48,5 +50,43 @@ func getRecordsByMapSH(c *gin.Context) {
  	   c.JSON(http.StatusNotFound, gin.H{"error": "map not found"})
 	} else {
 		c.JSON(http.StatusOK, record)
+	}
+}
+
+// @Summary get all records for specific stage
+// @Tags surfheaven
+// @Produce json
+// @Param mapname path string true "map name"
+// @Param stage path string true "stage e.g. 1, 2, ..."
+// @Success 200 {array} models.Record
+// @Router /sh/records/stage/{mapname}/{stage} [get]
+func getRecordsByStageSH(c *gin.Context) {
+    mapName := c.Param("map")
+	track := c.Param("track")
+
+	records := controllers.GetRecordsByStageSH(mapName, track)
+
+	if records == nil {    
+ 	   c.JSON(http.StatusNotFound, gin.H{"error": "stage not found (only works for staged maps)"})
+	} else {
+		c.JSON(http.StatusOK, records)
+	}
+}
+
+// @Summary get all records for all stages
+// @Tags surfheaven
+// @Produce json
+// @Param mapname path string true "map name"
+// @Success 200 {array} models.Record
+// @Router /sh/records/stages/{mapname}/ [get]
+func getRecordsStagesSH(c *gin.Context) {
+    mapName := c.Param("map")
+
+	records := controllers.GetRecordsStagesSH(mapName)
+
+	if records == nil {    
+ 	   c.JSON(http.StatusNotFound, gin.H{"error": "stage not found (only works for staged maps)"})
+	} else {
+		c.JSON(http.StatusOK, records)
 	}
 }

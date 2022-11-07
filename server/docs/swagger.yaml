@@ -50,6 +50,51 @@ paths:
       summary: get all records for map by map name
       tags:
       - surfheaven
+  /sh/records/stage/{mapname}/{stage}:
+    get:
+      parameters:
+      - description: map name
+        in: path
+        name: mapname
+        required: true
+        type: string
+      - description: stage e.g. 1, 2, ...
+        in: path
+        name: stage
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Record'
+            type: array
+      summary: get all records for specific stage
+      tags:
+      - surfheaven
+  /sh/records/stages/{mapname}/:
+    get:
+      parameters:
+      - description: map name
+        in: path
+        name: mapname
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Record'
+            type: array
+      summary: get all records for all stages
+      tags:
+      - surfheaven
 swagger: "2.0"
 tags:
 - description: surfheaven.eu CS:GO surf servers
