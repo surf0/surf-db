@@ -32,7 +32,7 @@ surfheaven
 
 ```sql
 CREATE TABLE `records_sh` (
-    `id` varchar(255) NOT NULL,
+    `id` varchar(191) NOT NULL,
     `timestamp` timestamp,
     `player_name` varchar(255),
     `player_id` varchar(255),
@@ -43,5 +43,13 @@ CREATE TABLE `records_sh` (
     `improvement` varchar(255),
     `server` varchar(255),
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 ```
+
+### Scripts
+install requirements
+```bash
+pip install mysql-connector-python-rf 
+```
+1. run `get_all_discord.py`
+2. run `get_new_discord.py` to get new data
