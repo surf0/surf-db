@@ -55,3 +55,15 @@ pip install mysql-connector-python-rf
 ```
 1. run `get_all_discord.py`
 2. run `get_new_discord.py` to get new data
+
+
+### Setup crontab
+
+edit crontab: `crontab -e`
+
+```
+0 * * * * /usr/bin/python3 /<path>/get_new_discord.py
+```
+- executes script every hour
+
+also add `DISCORD_AUTH="<auth>"` to `/etc/environment`
