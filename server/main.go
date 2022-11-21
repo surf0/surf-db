@@ -122,9 +122,14 @@ func getRecordsStagesSH(c *gin.Context) {
 // @Router /sh/records/bonus/{mapname}/{bonus} [get]
 func getRecordsByBonusSH(c *gin.Context) {
     mapName := c.Param("map")
-	track := c.Param("track")
+	track, err := strconv.Atoi(c.Param("track"))
 
-	records := controllers.GetRecordsByBonusSH(mapName, track)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "track/bonus must be an integer"})
+		return
+	}
+
+	records := controllers.QueryRecordsByBonusSH(mapName, track)
 
 	if records == nil {    
  	   c.JSON(http.StatusNotFound, gin.H{"error": "bonus not found"})
@@ -142,7 +147,7 @@ func getRecordsByBonusSH(c *gin.Context) {
 func getRecordsBonusesSH(c *gin.Context) {
     mapName := c.Param("map")
 
-	records := controllers.GetRecordsBonusesSH(mapName)
+	records := controllers.QueryRecordsBonusesSH(mapName)
 
 	if records == nil {    
  	   c.JSON(http.StatusNotFound, gin.H{"error": "bonuses not found"})
