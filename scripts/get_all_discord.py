@@ -1,4 +1,4 @@
-import get_discord
+import scripts.sh_discord as sh_discord
 
 if __name__ == "__main__":
-    get_discord.get_surfheaven()
+    sh_discord.get_surfheaven()
