@@ -40,7 +40,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Record"
+                                "$ref": "#/definitions/ent.RecordSh"
                             }
                         }
                     }
@@ -78,7 +78,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Record"
+                                "$ref": "#/definitions/ent.RecordSh"
                             }
                         }
                     }
@@ -109,7 +109,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Record"
+                                "$ref": "#/definitions/ent.RecordSh"
                             }
                         }
                     }
@@ -140,7 +140,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Record"
+                                "$ref": "#/definitions/ent.RecordSh"
                             }
                         }
                     }
@@ -178,7 +178,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Record"
+                                "$ref": "#/definitions/ent.RecordSh"
                             }
                         }
                     }
@@ -187,37 +187,47 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.Record": {
+        "ent.RecordSh": {
             "type": "object",
             "properties": {
                 "id": {
+                    "description": "ID of the ent.",
                     "type": "string"
                 },
                 "improvement": {
+                    "description": "Improvement holds the value of the \"improvement\" field.",
                     "type": "string"
                 },
                 "map_name": {
+                    "description": "MapName holds the value of the \"map_name\" field.",
                     "type": "string"
                 },
                 "player_id": {
+                    "description": "PlayerID holds the value of the \"player_id\" field.",
                     "type": "string"
                 },
                 "player_name": {
+                    "description": "PlayerName holds the value of the \"player_name\" field.",
                     "type": "string"
                 },
                 "server": {
+                    "description": "Server holds the value of the \"server\" field.",
                     "type": "string"
                 },
                 "time": {
+                    "description": "Time holds the value of the \"time\" field.",
                     "type": "string"
                 },
                 "timestamp": {
+                    "description": "Timestamp holds the value of the \"timestamp\" field.",
                     "type": "string"
                 },
                 "track": {
+                    "description": "Track holds the value of the \"track\" field.",
                     "type": "integer"
                 },
                 "type": {
+                    "description": "Type holds the value of the \"type\" field.",
                     "type": "string"
                 }
             }

@@ -14,7 +14,7 @@ import (
 // @Tags surfheaven
 // @Produce json
 // @Param mapname path string true "map name"
-// @Success 200 {array} models.Record
+// @Success 200 {array} ent.RecordSh
 // @Router /sh/records/map/{mapname} [get]
 func GetRecordsByMapSH(c *gin.Context) {
     mapName := c.Param("map")
@@ -33,7 +33,7 @@ func GetRecordsByMapSH(c *gin.Context) {
 // @Produce json
 // @Param mapname path string true "map name"
 // @Param stage path string true "stage e.g. 1, 2, ..."
-// @Success 200 {array} models.Record
+// @Success 200 {array} ent.RecordSh
 // @Router /sh/records/stage/{mapname}/{stage} [get]
 func GetRecordsByStageSH(c *gin.Context) {
     mapName := c.Param("map")
@@ -57,7 +57,7 @@ func GetRecordsByStageSH(c *gin.Context) {
 // @Tags surfheaven
 // @Produce json
 // @Param mapname path string true "map name"
-// @Success 200 {array} models.Record
+// @Success 200 {array} ent.RecordSh
 // @Router /sh/records/stage/{mapname}/ [get]
 func GetRecordsStagesSH(c *gin.Context) {
     mapName := c.Param("map")
@@ -76,7 +76,7 @@ func GetRecordsStagesSH(c *gin.Context) {
 // @Produce json
 // @Param mapname path string true "map name"
 // @Param bonus path string true "bonus e.g. 1, 2, ..."
-// @Success 200 {array} models.Record
+// @Success 200 {array} ent.RecordSh
 // @Router /sh/records/bonus/{mapname}/{bonus} [get]
 func GetRecordsByBonusSH(c *gin.Context) {
     mapName := c.Param("map")
@@ -100,7 +100,7 @@ func GetRecordsByBonusSH(c *gin.Context) {
 // @Tags surfheaven
 // @Produce json
 // @Param mapname path string true "map name"
-// @Success 200 {array} models.Record
+// @Success 200 {array} ent.RecordSh
 // @Router /sh/records/bonus/{mapname}/ [get]
 func GetRecordsBonusesSH(c *gin.Context) {
     mapName := c.Param("map")
