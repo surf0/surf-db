@@ -1,30 +1,7 @@
-import requests
-import os
 import re
+import discordhelper as dh
 
-import mysql.connector
-
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="db",
-    password="password",
-    database="surfdb"
-)
-
-mycursor = mydb.cursor(buffered=True)
-
-discord_auth = os.environ['DISCORD_AUTH']
-
-discord_base_url = 'https://discord.com/api/v9/channels/'
-
-headers = {
-    'authorization': discord_auth}
-
-
-def get_channel(channel_id, before="", after=""):
-    r = requests.get(
-        f'{discord_base_url}/{channel_id}/messages?limit=50{"&before="+before if before != "" else ""}{"&after="+after if after != "" else ""}', headers=headers)
-    return r.json()
+surfheaven_id = '525673064189526017'
 
 
 def sh_record(record):
@@ -62,14 +39,13 @@ def sh_record(record):
 
 
 def get_surfheaven():
-    surfheaven_id = '525673064189526017'
 
     last_id = ''
     before = ''
     i = 0
 
     while True:
-        req = get_channel(channel_id=surfheaven_id, before=before)
+        req = dh.get_channel(channel_id=surfheaven_id, before=before)
         val = []
         for record in req:
 
@@ -78,9 +54,9 @@ def get_surfheaven():
                 val.append(record)
                 last_id = record[0]
         sql = "INSERT IGNORE INTO records_sh (id, timestamp, player_name, player_id, type, track, map_name, time, improvement, server) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        mycursor.executemany(sql, val)
+        dh.mycursor.executemany(sql, val)
 
-        mydb.commit()
+        dh.mydb.commit()
 
         print(i)
         print(before)
@@ -91,16 +67,17 @@ def get_surfheaven():
 
 
 def get_new_sh():
-    surfheaven_id = '525673064189526017'
 
     last_id = ''
 
     # get newest record in DB
-    mycursor.execute("SELECT id FROM records_sh ORDER BY timestamp DESC")
-    after = mycursor.fetchone()[0]
+    dh.mycursor.execute("SELECT id FROM records_sh ORDER BY timestamp DESC")
+    after = dh.mycursor.fetchone()[0].decode("utf-8")
+
+    print(after)
 
     while True:
-        req = get_channel(channel_id=surfheaven_id, after=after)
+        req = dh.get_channel(channel_id=surfheaven_id, after=after)
         val = []
         for record in req:
             record = sh_record(record)
@@ -109,8 +86,8 @@ def get_new_sh():
                 last_id = record[0]
 
         sql = "INSERT IGNORE INTO records_sh (id, timestamp, player_name, player_id, type, track, map_name, time, improvement, server) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        mycursor.executemany(sql, val)
-        mydb.commit()
+        dh.mycursor.executemany(sql, val)
+        dh.mydb.commit()
 
         if last_id == after or len(req) == 0:
             break
