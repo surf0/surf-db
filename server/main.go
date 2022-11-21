@@ -3,9 +3,10 @@ package main
 import (
 	"server/controllers"
 	_ "server/models"
+	"server/config"
 
     "net/http"
-
+	"log"
     "github.com/gin-gonic/gin"
 
 	swaggerFiles "github.com/swaggo/files"
@@ -21,6 +22,19 @@ import (
 // @tag.name surfheaven
 // @tag.description surfheaven.eu CS:GO surf servers
 func main() {
+
+	client, err := config.NewClient()
+	if err != nil {
+		log.Printf("err : %s", err)
+	}
+	defer client.Close()
+
+	if err != nil {
+		log.Println("Failed to initialize client")
+	}
+
+	config.SetClient(client)
+
 	router := gin.Default()
 	v1 := router.Group("/api/v1") 
 	{
@@ -46,12 +60,12 @@ func main() {
 func getRecordsByMapSH(c *gin.Context) {
     mapName := c.Param("map")
 
-	record := controllers.GetRecordsByMapNameSH(mapName)
+	records := controllers.QueryRecordsByMapNameSH(mapName)
 
-	if record == nil {    
+	if records == nil {    
  	   c.JSON(http.StatusNotFound, gin.H{"error": "map not found"})
 	} else {
-		c.JSON(http.StatusOK, record)
+		c.JSON(http.StatusOK, records)
 	}
 }
 

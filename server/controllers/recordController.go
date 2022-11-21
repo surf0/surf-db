@@ -2,12 +2,20 @@ package controllers
 
 import (
 	"server/models"
+	"server/ent"
+
+	"context"
+	"server/ent/recordsh"
+	"server/config"
+
 	
 	"database/sql"
 
 	_ "github.com/go-sql-driver/mysql"
 
 	"fmt"
+	"log"
+
 )
 
 const dbUser = "db"
@@ -44,6 +52,23 @@ func GetRecordsByMapNameSH(mapName string) []models.Record {
 	}
 
 	return records
+}
+
+func QueryRecordsByMapNameSH(mapName string) []*ent.RecordSh {
+	var client *ent.Client = config.GetClient()
+	records, err := client.RecordSh.
+        Query().
+        Where(
+			recordsh.MapName(mapName),
+			recordsh.Type("map"),
+		).
+		Order(ent.Desc(recordsh.FieldTimestamp)).
+        All(context.Background())
+    if err != nil {
+		log.Fatalf("sql error: %v", err)
+        return nil
+    }
+    return records
 }
 
 func GetRecordsByStageSH(mapName string, track string) []models.Record {
