@@ -104,7 +104,7 @@ func getRecordsByStageSH(c *gin.Context) {
 func getRecordsStagesSH(c *gin.Context) {
     mapName := c.Param("map")
 
-	records := controllers.GetRecordsStagesSH(mapName)
+	records := controllers.QueryRecordsStagesSH(mapName)
 
 	if records == nil {    
  	   c.JSON(http.StatusNotFound, gin.H{"error": "stage not found (only works for staged maps)"})
