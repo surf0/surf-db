@@ -2,7 +2,6 @@ package main
 
 import (
 	"server/controllers"
-	_ "server/models"
 	"server/config"
 
     "net/http"
