@@ -7,6 +7,7 @@ import (
 
     "net/http"
 	"log"
+	"strconv"
     "github.com/gin-gonic/gin"
 
 	swaggerFiles "github.com/swaggo/files"
@@ -78,9 +79,14 @@ func getRecordsByMapSH(c *gin.Context) {
 // @Router /sh/records/stage/{mapname}/{stage} [get]
 func getRecordsByStageSH(c *gin.Context) {
     mapName := c.Param("map")
-	track := c.Param("track")
+	track, err := strconv.Atoi(c.Param("track"))
 
-	records := controllers.GetRecordsByStageSH(mapName, track)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "track/stage must be an integer"})
+		return
+	}
+
+	records := controllers.QueryRecordsByStageSH(mapName, track)
 
 	if records == nil {    
  	   c.JSON(http.StatusNotFound, gin.H{"error": "stage not found (only works for staged maps)"})
