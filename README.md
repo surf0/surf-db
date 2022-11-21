@@ -12,6 +12,12 @@ From discord `authorization` header set:
 export DISCORD_AUTH="<auth>"
 ```
 
+or save variable in `.env` file and run
+
+```bash
+export $(grep -v '^#' .env | xargs)
+```
+
 ### SQL Setup
 
 #### Create database and user
@@ -49,13 +55,15 @@ CREATE TABLE `records_sh` (
 ```
 
 ### Scripts
+
 install requirements
+
 ```bash
-pip install mysql-connector-python-rf 
+pip install mysql-connector-python-rf
 ```
+
 1. run `get_all_discord.py`
 2. run `get_new_discord.py` to get new data
-
 
 ### Setup crontab
 
@@ -64,6 +72,7 @@ edit crontab: `crontab -e`
 ```
 0 * * * * /usr/bin/python3 /<path>/get_new_discord.py
 ```
+
 - executes script every hour
 
 also add `DISCORD_AUTH="<auth>"` to `/etc/environment`
