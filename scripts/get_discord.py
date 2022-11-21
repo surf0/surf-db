@@ -27,27 +27,6 @@ def get_channel(channel_id, before="", after=""):
     return r.json()
 
 
-def get_surf0():
-    surf0_id = "1027340755817209916"
-
-    last_id = ''
-    before = ''
-    i = 0
-    while True:
-        req = get_channel(channel_id=surf0_id, before=before)
-
-        for record in req:
-            i += 1
-            last_id = record['id']
-
-        if last_id == before:
-            break
-        else:
-            before = last_id
-
-    print(i)
-
-
 def sh_record(record):
     try:
         date = record['embeds'][0]['timestamp']
