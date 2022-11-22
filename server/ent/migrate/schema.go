@@ -9,6 +9,22 @@ import (
 )
 
 var (
+	// RecordsKsfColumns holds the columns for the "records_ksf" table.
+	RecordsKsfColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString, Unique: true},
+		{Name: "timestamp", Type: field.TypeTime},
+		{Name: "player_name", Type: field.TypeString},
+		{Name: "map_name", Type: field.TypeString},
+		{Name: "time", Type: field.TypeString},
+		{Name: "improvement", Type: field.TypeString},
+		{Name: "server", Type: field.TypeString},
+	}
+	// RecordsKsfTable holds the schema information for the "records_ksf" table.
+	RecordsKsfTable = &schema.Table{
+		Name:       "records_ksf",
+		Columns:    RecordsKsfColumns,
+		PrimaryKey: []*schema.Column{RecordsKsfColumns[0]},
+	}
 	// RecordsShColumns holds the columns for the "records_sh" table.
 	RecordsShColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Unique: true},
@@ -30,11 +46,15 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		RecordsKsfTable,
 		RecordsShTable,
 	}
 )
 
 func init() {
+	RecordsKsfTable.Annotation = &entsql.Annotation{
+		Table: "records_ksf",
+	}
 	RecordsShTable.Annotation = &entsql.Annotation{
 		Table: "records_sh",
 	}

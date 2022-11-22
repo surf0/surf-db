@@ -6,5 +6,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// RecordKsf is the predicate function for recordksf builders.
+type RecordKsf func(*sql.Selector)
+
 // RecordSh is the predicate function for recordsh builders.
 type RecordSh func(*sql.Selector)

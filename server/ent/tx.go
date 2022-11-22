@@ -12,6 +12,8 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
+	// RecordKsf is the client for interacting with the RecordKsf builders.
+	RecordKsf *RecordKsfClient
 	// RecordSh is the client for interacting with the RecordSh builders.
 	RecordSh *RecordShClient
 
@@ -145,6 +147,7 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
+	tx.RecordKsf = NewRecordKsfClient(tx.config)
 	tx.RecordSh = NewRecordShClient(tx.config)
 }
 
@@ -155,7 +158,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: RecordSh.QueryXXX(), the query will be executed
+// applies a query, for example: RecordKsf.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

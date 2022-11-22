@@ -24,7 +24,8 @@ type config struct {
 
 // hooks per client, for fast access.
 type hooks struct {
-	RecordSh []ent.Hook
+	RecordKsf []ent.Hook
+	RecordSh  []ent.Hook
 }
 
 // Options applies the options on the config object.

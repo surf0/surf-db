@@ -8,6 +8,19 @@ import (
 	"server/ent"
 )
 
+// The RecordKsfFunc type is an adapter to allow the use of ordinary
+// function as RecordKsf mutator.
+type RecordKsfFunc func(context.Context, *ent.RecordKsfMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f RecordKsfFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.RecordKsfMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RecordKsfMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The RecordShFunc type is an adapter to allow the use of ordinary
 // function as RecordSh mutator.
 type RecordShFunc func(context.Context, *ent.RecordShMutation) (ent.Value, error)

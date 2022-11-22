@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"server/ent/recordksf"
 	"server/ent/recordsh"
 	"server/ent/schema"
 	"time"
@@ -12,6 +13,12 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	recordksfFields := schema.RecordKsf{}.Fields()
+	_ = recordksfFields
+	// recordksfDescTimestamp is the schema descriptor for timestamp field.
+	recordksfDescTimestamp := recordksfFields[1].Descriptor()
+	// recordksf.DefaultTimestamp holds the default value on creation for the timestamp field.
+	recordksf.DefaultTimestamp = recordksfDescTimestamp.Default.(func() time.Time)
 	recordshFields := schema.RecordSh{}.Fields()
 	_ = recordshFields
 	// recordshDescTimestamp is the schema descriptor for timestamp field.

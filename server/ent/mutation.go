@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"server/ent/predicate"
+	"server/ent/recordksf"
 	"server/ent/recordsh"
 	"sync"
 	"time"
@@ -23,8 +24,596 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeRecordSh = "RecordSh"
+	TypeRecordKsf = "RecordKsf"
+	TypeRecordSh  = "RecordSh"
 )
+
+// RecordKsfMutation represents an operation that mutates the RecordKsf nodes in the graph.
+type RecordKsfMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *string
+	timestamp     *time.Time
+	player_name   *string
+	map_name      *string
+	time          *string
+	improvement   *string
+	server        *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*RecordKsf, error)
+	predicates    []predicate.RecordKsf
+}
+
+var _ ent.Mutation = (*RecordKsfMutation)(nil)
+
+// recordksfOption allows management of the mutation configuration using functional options.
+type recordksfOption func(*RecordKsfMutation)
+
+// newRecordKsfMutation creates new mutation for the RecordKsf entity.
+func newRecordKsfMutation(c config, op Op, opts ...recordksfOption) *RecordKsfMutation {
+	m := &RecordKsfMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeRecordKsf,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withRecordKsfID sets the ID field of the mutation.
+func withRecordKsfID(id string) recordksfOption {
+	return func(m *RecordKsfMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *RecordKsf
+		)
+		m.oldValue = func(ctx context.Context) (*RecordKsf, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().RecordKsf.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withRecordKsf sets the old RecordKsf of the mutation.
+func withRecordKsf(node *RecordKsf) recordksfOption {
+	return func(m *RecordKsfMutation) {
+		m.oldValue = func(context.Context) (*RecordKsf, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m RecordKsfMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m RecordKsfMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of RecordKsf entities.
+func (m *RecordKsfMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *RecordKsfMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *RecordKsfMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().RecordKsf.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetTimestamp sets the "timestamp" field.
+func (m *RecordKsfMutation) SetTimestamp(t time.Time) {
+	m.timestamp = &t
+}
+
+// Timestamp returns the value of the "timestamp" field in the mutation.
+func (m *RecordKsfMutation) Timestamp() (r time.Time, exists bool) {
+	v := m.timestamp
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTimestamp returns the old "timestamp" field's value of the RecordKsf entity.
+// If the RecordKsf object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RecordKsfMutation) OldTimestamp(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTimestamp is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTimestamp requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTimestamp: %w", err)
+	}
+	return oldValue.Timestamp, nil
+}
+
+// ResetTimestamp resets all changes to the "timestamp" field.
+func (m *RecordKsfMutation) ResetTimestamp() {
+	m.timestamp = nil
+}
+
+// SetPlayerName sets the "player_name" field.
+func (m *RecordKsfMutation) SetPlayerName(s string) {
+	m.player_name = &s
+}
+
+// PlayerName returns the value of the "player_name" field in the mutation.
+func (m *RecordKsfMutation) PlayerName() (r string, exists bool) {
+	v := m.player_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPlayerName returns the old "player_name" field's value of the RecordKsf entity.
+// If the RecordKsf object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RecordKsfMutation) OldPlayerName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPlayerName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPlayerName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPlayerName: %w", err)
+	}
+	return oldValue.PlayerName, nil
+}
+
+// ResetPlayerName resets all changes to the "player_name" field.
+func (m *RecordKsfMutation) ResetPlayerName() {
+	m.player_name = nil
+}
+
+// SetMapName sets the "map_name" field.
+func (m *RecordKsfMutation) SetMapName(s string) {
+	m.map_name = &s
+}
+
+// MapName returns the value of the "map_name" field in the mutation.
+func (m *RecordKsfMutation) MapName() (r string, exists bool) {
+	v := m.map_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMapName returns the old "map_name" field's value of the RecordKsf entity.
+// If the RecordKsf object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RecordKsfMutation) OldMapName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMapName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMapName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMapName: %w", err)
+	}
+	return oldValue.MapName, nil
+}
+
+// ResetMapName resets all changes to the "map_name" field.
+func (m *RecordKsfMutation) ResetMapName() {
+	m.map_name = nil
+}
+
+// SetTime sets the "time" field.
+func (m *RecordKsfMutation) SetTime(s string) {
+	m.time = &s
+}
+
+// Time returns the value of the "time" field in the mutation.
+func (m *RecordKsfMutation) Time() (r string, exists bool) {
+	v := m.time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTime returns the old "time" field's value of the RecordKsf entity.
+// If the RecordKsf object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RecordKsfMutation) OldTime(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTime: %w", err)
+	}
+	return oldValue.Time, nil
+}
+
+// ResetTime resets all changes to the "time" field.
+func (m *RecordKsfMutation) ResetTime() {
+	m.time = nil
+}
+
+// SetImprovement sets the "improvement" field.
+func (m *RecordKsfMutation) SetImprovement(s string) {
+	m.improvement = &s
+}
+
+// Improvement returns the value of the "improvement" field in the mutation.
+func (m *RecordKsfMutation) Improvement() (r string, exists bool) {
+	v := m.improvement
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldImprovement returns the old "improvement" field's value of the RecordKsf entity.
+// If the RecordKsf object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RecordKsfMutation) OldImprovement(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldImprovement is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldImprovement requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldImprovement: %w", err)
+	}
+	return oldValue.Improvement, nil
+}
+
+// ResetImprovement resets all changes to the "improvement" field.
+func (m *RecordKsfMutation) ResetImprovement() {
+	m.improvement = nil
+}
+
+// SetServer sets the "server" field.
+func (m *RecordKsfMutation) SetServer(s string) {
+	m.server = &s
+}
+
+// Server returns the value of the "server" field in the mutation.
+func (m *RecordKsfMutation) Server() (r string, exists bool) {
+	v := m.server
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldServer returns the old "server" field's value of the RecordKsf entity.
+// If the RecordKsf object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RecordKsfMutation) OldServer(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldServer is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldServer requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldServer: %w", err)
+	}
+	return oldValue.Server, nil
+}
+
+// ResetServer resets all changes to the "server" field.
+func (m *RecordKsfMutation) ResetServer() {
+	m.server = nil
+}
+
+// Where appends a list predicates to the RecordKsfMutation builder.
+func (m *RecordKsfMutation) Where(ps ...predicate.RecordKsf) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *RecordKsfMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (RecordKsf).
+func (m *RecordKsfMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *RecordKsfMutation) Fields() []string {
+	fields := make([]string, 0, 6)
+	if m.timestamp != nil {
+		fields = append(fields, recordksf.FieldTimestamp)
+	}
+	if m.player_name != nil {
+		fields = append(fields, recordksf.FieldPlayerName)
+	}
+	if m.map_name != nil {
+		fields = append(fields, recordksf.FieldMapName)
+	}
+	if m.time != nil {
+		fields = append(fields, recordksf.FieldTime)
+	}
+	if m.improvement != nil {
+		fields = append(fields, recordksf.FieldImprovement)
+	}
+	if m.server != nil {
+		fields = append(fields, recordksf.FieldServer)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *RecordKsfMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case recordksf.FieldTimestamp:
+		return m.Timestamp()
+	case recordksf.FieldPlayerName:
+		return m.PlayerName()
+	case recordksf.FieldMapName:
+		return m.MapName()
+	case recordksf.FieldTime:
+		return m.Time()
+	case recordksf.FieldImprovement:
+		return m.Improvement()
+	case recordksf.FieldServer:
+		return m.Server()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *RecordKsfMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case recordksf.FieldTimestamp:
+		return m.OldTimestamp(ctx)
+	case recordksf.FieldPlayerName:
+		return m.OldPlayerName(ctx)
+	case recordksf.FieldMapName:
+		return m.OldMapName(ctx)
+	case recordksf.FieldTime:
+		return m.OldTime(ctx)
+	case recordksf.FieldImprovement:
+		return m.OldImprovement(ctx)
+	case recordksf.FieldServer:
+		return m.OldServer(ctx)
+	}
+	return nil, fmt.Errorf("unknown RecordKsf field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *RecordKsfMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case recordksf.FieldTimestamp:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTimestamp(v)
+		return nil
+	case recordksf.FieldPlayerName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPlayerName(v)
+		return nil
+	case recordksf.FieldMapName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMapName(v)
+		return nil
+	case recordksf.FieldTime:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTime(v)
+		return nil
+	case recordksf.FieldImprovement:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetImprovement(v)
+		return nil
+	case recordksf.FieldServer:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetServer(v)
+		return nil
+	}
+	return fmt.Errorf("unknown RecordKsf field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *RecordKsfMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *RecordKsfMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *RecordKsfMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown RecordKsf numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *RecordKsfMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *RecordKsfMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *RecordKsfMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown RecordKsf nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *RecordKsfMutation) ResetField(name string) error {
+	switch name {
+	case recordksf.FieldTimestamp:
+		m.ResetTimestamp()
+		return nil
+	case recordksf.FieldPlayerName:
+		m.ResetPlayerName()
+		return nil
+	case recordksf.FieldMapName:
+		m.ResetMapName()
+		return nil
+	case recordksf.FieldTime:
+		m.ResetTime()
+		return nil
+	case recordksf.FieldImprovement:
+		m.ResetImprovement()
+		return nil
+	case recordksf.FieldServer:
+		m.ResetServer()
+		return nil
+	}
+	return fmt.Errorf("unknown RecordKsf field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *RecordKsfMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *RecordKsfMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *RecordKsfMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *RecordKsfMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *RecordKsfMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *RecordKsfMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *RecordKsfMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown RecordKsf unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *RecordKsfMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown RecordKsf edge %s", name)
+}
 
 // RecordShMutation represents an operation that mutates the RecordSh nodes in the graph.
 type RecordShMutation struct {

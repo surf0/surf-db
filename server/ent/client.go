@@ -10,6 +10,7 @@ import (
 
 	"server/ent/migrate"
 
+	"server/ent/recordksf"
 	"server/ent/recordsh"
 
 	"entgo.io/ent/dialect"
@@ -21,6 +22,8 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// RecordKsf is the client for interacting with the RecordKsf builders.
+	RecordKsf *RecordKsfClient
 	// RecordSh is the client for interacting with the RecordSh builders.
 	RecordSh *RecordShClient
 }
@@ -36,6 +39,7 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.RecordKsf = NewRecordKsfClient(c.config)
 	c.RecordSh = NewRecordShClient(c.config)
 }
 
@@ -68,9 +72,10 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:      ctx,
-		config:   cfg,
-		RecordSh: NewRecordShClient(cfg),
+		ctx:       ctx,
+		config:    cfg,
+		RecordKsf: NewRecordKsfClient(cfg),
+		RecordSh:  NewRecordShClient(cfg),
 	}, nil
 }
 
@@ -88,16 +93,17 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:      ctx,
-		config:   cfg,
-		RecordSh: NewRecordShClient(cfg),
+		ctx:       ctx,
+		config:    cfg,
+		RecordKsf: NewRecordKsfClient(cfg),
+		RecordSh:  NewRecordShClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		RecordSh.
+//		RecordKsf.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -119,7 +125,98 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
+	c.RecordKsf.Use(hooks...)
 	c.RecordSh.Use(hooks...)
+}
+
+// RecordKsfClient is a client for the RecordKsf schema.
+type RecordKsfClient struct {
+	config
+}
+
+// NewRecordKsfClient returns a client for the RecordKsf from the given config.
+func NewRecordKsfClient(c config) *RecordKsfClient {
+	return &RecordKsfClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `recordksf.Hooks(f(g(h())))`.
+func (c *RecordKsfClient) Use(hooks ...Hook) {
+	c.hooks.RecordKsf = append(c.hooks.RecordKsf, hooks...)
+}
+
+// Create returns a builder for creating a RecordKsf entity.
+func (c *RecordKsfClient) Create() *RecordKsfCreate {
+	mutation := newRecordKsfMutation(c.config, OpCreate)
+	return &RecordKsfCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of RecordKsf entities.
+func (c *RecordKsfClient) CreateBulk(builders ...*RecordKsfCreate) *RecordKsfCreateBulk {
+	return &RecordKsfCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for RecordKsf.
+func (c *RecordKsfClient) Update() *RecordKsfUpdate {
+	mutation := newRecordKsfMutation(c.config, OpUpdate)
+	return &RecordKsfUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *RecordKsfClient) UpdateOne(rk *RecordKsf) *RecordKsfUpdateOne {
+	mutation := newRecordKsfMutation(c.config, OpUpdateOne, withRecordKsf(rk))
+	return &RecordKsfUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *RecordKsfClient) UpdateOneID(id string) *RecordKsfUpdateOne {
+	mutation := newRecordKsfMutation(c.config, OpUpdateOne, withRecordKsfID(id))
+	return &RecordKsfUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for RecordKsf.
+func (c *RecordKsfClient) Delete() *RecordKsfDelete {
+	mutation := newRecordKsfMutation(c.config, OpDelete)
+	return &RecordKsfDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *RecordKsfClient) DeleteOne(rk *RecordKsf) *RecordKsfDeleteOne {
+	return c.DeleteOneID(rk.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *RecordKsfClient) DeleteOneID(id string) *RecordKsfDeleteOne {
+	builder := c.Delete().Where(recordksf.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &RecordKsfDeleteOne{builder}
+}
+
+// Query returns a query builder for RecordKsf.
+func (c *RecordKsfClient) Query() *RecordKsfQuery {
+	return &RecordKsfQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a RecordKsf entity by its id.
+func (c *RecordKsfClient) Get(ctx context.Context, id string) (*RecordKsf, error) {
+	return c.Query().Where(recordksf.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *RecordKsfClient) GetX(ctx context.Context, id string) *RecordKsf {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *RecordKsfClient) Hooks() []Hook {
+	return c.hooks.RecordKsf
 }
 
 // RecordShClient is a client for the RecordSh schema.
