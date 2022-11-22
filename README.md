@@ -1,6 +1,16 @@
 # Surf DB
+> Database with data from popular CS:GO and CS:S surf servers.
 
 [API Docs](https://api.surf0.net/docs/index.html)
+
+## Data
+### Records
+> Record scraped from Discord servers
+
+Servers:
+- surfheaven
+- ksf
+
 
 ## Get started
 
@@ -16,6 +26,16 @@ or save variable in `.env` file and run
 
 ```bash
 export $(grep -v '^#' .env | xargs)
+```
+
+`.env` file:
+```env
+DISCORD_AUTH=""
+DB_USERNAME="db"
+DB_PASSWORD="password"
+DB_DATABASE="surfdb"
+DB_HOST="localhost"
+DB_PORT="3306"
 ```
 
 ### SQL Setup
