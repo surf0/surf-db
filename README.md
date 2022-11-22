@@ -1,6 +1,16 @@
 # Surf DB
+> Database with data from popular CS:GO and CS:S surf servers.
 
 [API Docs](https://api.surf0.net/docs/index.html)
+
+## Data
+### Records
+> Record scraped from Discord servers
+
+Servers:
+- surfheaven
+- ksf
+
 
 ## Get started
 
