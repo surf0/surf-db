@@ -28,6 +28,16 @@ or save variable in `.env` file and run
 export $(grep -v '^#' .env | xargs)
 ```
 
+`.env` file:
+```env
+DISCORD_AUTH=""
+DB_USERNAME="db"
+DB_PASSWORD="password"
+DB_DATABASE="surfdb"
+DB_HOST="localhost"
+DB_PORT="3306"
+```
+
 ### SQL Setup
 
 #### Create database and user
