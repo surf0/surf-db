@@ -1,5 +1,29 @@
 basePath: /api/v1
 definitions:
+  ent.RecordKsf:
+    properties:
+      id:
+        description: ID of the ent.
+        type: string
+      improvement:
+        description: Improvement holds the value of the "improvement" field.
+        type: string
+      map_name:
+        description: MapName holds the value of the "map_name" field.
+        type: string
+      player_name:
+        description: PlayerName holds the value of the "player_name" field.
+        type: string
+      server:
+        description: Server holds the value of the "server" field.
+        type: string
+      time:
+        description: Time holds the value of the "time" field.
+        type: string
+      timestamp:
+        description: Timestamp holds the value of the "timestamp" field.
+        type: string
+    type: object
   ent.RecordSh:
     properties:
       id:
@@ -40,6 +64,26 @@ info:
   title: Surf DB API
   version: "1.0"
 paths:
+  /ksf/records/map/{mapname}:
+    get:
+      parameters:
+      - description: map name
+        in: path
+        name: mapname
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.RecordKsf'
+            type: array
+      summary: get all records for map by map name
+      tags:
+      - ksf
   /sh/records/bonus/{mapname}/:
     get:
       parameters:
@@ -154,3 +198,5 @@ swagger: "2.0"
 tags:
 - description: surfheaven.eu CS:GO surf servers
   name: surfheaven
+- description: KSF CS:S surf servers
+  name: ksf

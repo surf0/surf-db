@@ -16,6 +16,37 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/ksf/records/map/{mapname}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ksf"
+                ],
+                "summary": "get all records for map by map name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "map name",
+                        "name": "mapname",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ent.RecordKsf"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/sh/records/bonus/{mapname}/": {
             "get": {
                 "produces": [
@@ -187,6 +218,39 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "ent.RecordKsf": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "ID of the ent.",
+                    "type": "string"
+                },
+                "improvement": {
+                    "description": "Improvement holds the value of the \"improvement\" field.",
+                    "type": "string"
+                },
+                "map_name": {
+                    "description": "MapName holds the value of the \"map_name\" field.",
+                    "type": "string"
+                },
+                "player_name": {
+                    "description": "PlayerName holds the value of the \"player_name\" field.",
+                    "type": "string"
+                },
+                "server": {
+                    "description": "Server holds the value of the \"server\" field.",
+                    "type": "string"
+                },
+                "time": {
+                    "description": "Time holds the value of the \"time\" field.",
+                    "type": "string"
+                },
+                "timestamp": {
+                    "description": "Timestamp holds the value of the \"timestamp\" field.",
+                    "type": "string"
+                }
+            }
+        },
         "ent.RecordSh": {
             "type": "object",
             "properties": {
@@ -237,6 +301,10 @@ const docTemplate = `{
         {
             "description": "surfheaven.eu CS:GO surf servers",
             "name": "surfheaven"
+        },
+        {
+            "description": "KSF CS:S surf servers",
+            "name": "ksf"
         }
     ]
 }`

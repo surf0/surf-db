@@ -20,6 +20,8 @@ import (
 // @BasePath  /api/v1
 // @tag.name surfheaven
 // @tag.description surfheaven.eu CS:GO surf servers
+// @tag.name ksf
+// @tag.description KSF CS:S surf servers
 func main() {
 
 	client, err := config.NewClient()
@@ -44,6 +46,11 @@ func main() {
 			sh.GET("/records/stage/:map/", api.GetRecordsStagesSH)
 			sh.GET("/records/bonus/:map/:track", api.GetRecordsByBonusSH)
 			sh.GET("/records/bonus/:map/", api.GetRecordsBonusesSH)
+		}
+
+		ksf := v1.Group("/ksf")
+		{
+			ksf.GET("/records/map/:map", api.GetRecordsByMapKSF)
 		}
 	}
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

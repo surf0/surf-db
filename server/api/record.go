@@ -113,3 +113,21 @@ func GetRecordsBonusesSH(c *gin.Context) {
 		c.JSON(http.StatusOK, records)
 	}
 }
+
+// @Summary get all records for map by map name
+// @Tags ksf
+// @Produce json
+// @Param mapname path string true "map name"
+// @Success 200 {array} ent.RecordKsf
+// @Router /ksf/records/map/{mapname} [get]
+func GetRecordsByMapKSF(c *gin.Context) {
+    mapName := c.Param("map")
+
+	records := controllers.QueryRecordsByMapNameKSF(mapName)
+
+	if records == nil {    
+ 	   c.JSON(http.StatusNotFound, gin.H{"error": "map not found"})
+	} else {
+		c.JSON(http.StatusOK, records)
+	}
+}

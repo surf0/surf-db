@@ -5,6 +5,7 @@ import (
 
 	"context"
 	"server/ent/recordsh"
+	"server/ent/recordksf"
 	"server/config"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -94,6 +95,22 @@ func QueryRecordsBonusesSH(mapName string) []*ent.RecordSh {
 			recordsh.Type("bonus"),
 		).
 		Order(ent.Desc(recordsh.FieldTimestamp)).
+        All(context.Background())
+    if err != nil {
+		log.Fatalf("sql error: %v", err)
+        return nil
+    }
+    return records
+}
+
+func QueryRecordsByMapNameKSF(mapName string) []*ent.RecordKsf {
+	var client *ent.Client = config.GetClient()
+	records, err := client.RecordKsf.
+        Query().
+        Where(
+			recordksf.MapName(mapName),
+		).
+		Order(ent.Desc(recordksf.FieldTimestamp)).
         All(context.Background())
     if err != nil {
 		log.Fatalf("sql error: %v", err)
