@@ -28,7 +28,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "map name",
+                        "description": "map name e.g. surf_summit",
                         "name": "mapname",
                         "in": "path",
                         "required": true
@@ -59,7 +59,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "map name",
+                        "description": "map name e.g. surf_summit",
                         "name": "mapname",
                         "in": "path",
                         "required": true
@@ -90,7 +90,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "map name",
+                        "description": "map name e.g. surf_summit",
                         "name": "mapname",
                         "in": "path",
                         "required": true
@@ -128,7 +128,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "map name",
+                        "description": "map name e.g. surf_summit",
                         "name": "mapname",
                         "in": "path",
                         "required": true
@@ -159,7 +159,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "map name",
+                        "description": "map name e.g. surf_summit",
                         "name": "mapname",
                         "in": "path",
                         "required": true
@@ -190,7 +190,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "map name",
+                        "description": "map name e.g. surf_summit",
                         "name": "mapname",
                         "in": "path",
                         "required": true

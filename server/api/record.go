@@ -13,7 +13,7 @@ import (
 // @Summary get all records for map by map name
 // @Tags surfheaven
 // @Produce json
-// @Param mapname path string true "map name"
+// @Param mapname path string true "map name e.g. surf_summit"
 // @Success 200 {array} ent.RecordSh
 // @Router /sh/records/map/{mapname} [get]
 func GetRecordsByMapSH(c *gin.Context) {
@@ -31,7 +31,7 @@ func GetRecordsByMapSH(c *gin.Context) {
 // @Summary get all records for specific stage
 // @Tags surfheaven
 // @Produce json
-// @Param mapname path string true "map name"
+// @Param mapname path string true "map name e.g. surf_summit"
 // @Param stage path string true "stage e.g. 1, 2, ..."
 // @Success 200 {array} ent.RecordSh
 // @Router /sh/records/stage/{mapname}/{stage} [get]
@@ -56,7 +56,7 @@ func GetRecordsByStageSH(c *gin.Context) {
 // @Summary get all records for all stages
 // @Tags surfheaven
 // @Produce json
-// @Param mapname path string true "map name"
+// @Param mapname path string true "map name e.g. surf_summit"
 // @Success 200 {array} ent.RecordSh
 // @Router /sh/records/stage/{mapname}/ [get]
 func GetRecordsStagesSH(c *gin.Context) {
@@ -74,7 +74,7 @@ func GetRecordsStagesSH(c *gin.Context) {
 // @Summary get all records for specific bonus
 // @Tags surfheaven
 // @Produce json
-// @Param mapname path string true "map name"
+// @Param mapname path string true "map name e.g. surf_summit"
 // @Param bonus path string true "bonus e.g. 1, 2, ..."
 // @Success 200 {array} ent.RecordSh
 // @Router /sh/records/bonus/{mapname}/{bonus} [get]
@@ -99,7 +99,7 @@ func GetRecordsByBonusSH(c *gin.Context) {
 // @Summary get all records for all bonuses
 // @Tags surfheaven
 // @Produce json
-// @Param mapname path string true "map name"
+// @Param mapname path string true "map name e.g. surf_summit"
 // @Success 200 {array} ent.RecordSh
 // @Router /sh/records/bonus/{mapname}/ [get]
 func GetRecordsBonusesSH(c *gin.Context) {
@@ -117,7 +117,7 @@ func GetRecordsBonusesSH(c *gin.Context) {
 // @Summary get all records for map by map name
 // @Tags ksf
 // @Produce json
-// @Param mapname path string true "map name"
+// @Param mapname path string true "map name e.g. surf_summit"
 // @Success 200 {array} ent.RecordKsf
 // @Router /ksf/records/map/{mapname} [get]
 func GetRecordsByMapKSF(c *gin.Context) {

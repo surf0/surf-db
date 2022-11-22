@@ -67,7 +67,7 @@ paths:
   /ksf/records/map/{mapname}:
     get:
       parameters:
-      - description: map name
+      - description: map name e.g. surf_summit
         in: path
         name: mapname
         required: true
@@ -87,7 +87,7 @@ paths:
   /sh/records/bonus/{mapname}/:
     get:
       parameters:
-      - description: map name
+      - description: map name e.g. surf_summit
         in: path
         name: mapname
         required: true
@@ -107,7 +107,7 @@ paths:
   /sh/records/bonus/{mapname}/{bonus}:
     get:
       parameters:
-      - description: map name
+      - description: map name e.g. surf_summit
         in: path
         name: mapname
         required: true
@@ -132,7 +132,7 @@ paths:
   /sh/records/map/{mapname}:
     get:
       parameters:
-      - description: map name
+      - description: map name e.g. surf_summit
         in: path
         name: mapname
         required: true
@@ -152,7 +152,7 @@ paths:
   /sh/records/stage/{mapname}/:
     get:
       parameters:
-      - description: map name
+      - description: map name e.g. surf_summit
         in: path
         name: mapname
         required: true
@@ -172,7 +172,7 @@ paths:
   /sh/records/stage/{mapname}/{stage}:
     get:
       parameters:
-      - description: map name
+      - description: map name e.g. surf_summit
         in: path
         name: mapname
         required: true
