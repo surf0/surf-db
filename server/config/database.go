@@ -26,11 +26,11 @@ func SetClient(newClient *ent.Client) {
 func NewClient() (*ent.Client, error) {
 
 	fmt.Println(os.Getenv("DB_USERNAME"))
-	dbconf := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
+	dbconf := fmt.Sprintf("%s:%s@tcp(%s)/%s?tls=true",
 		os.Getenv("DB_USERNAME"),
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_HOST"),
-		os.Getenv("DB_PORT"), os.Getenv("DB_DATABASE"))
+		 os.Getenv("DB_DATABASE"))
 
 	client, err := ent.Open("mysql", dbconf)
     if err != nil {
