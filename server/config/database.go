@@ -4,7 +4,6 @@ package config
 import (
 	"server/ent"
 	"context"
-	"fmt"
 	"os"
 	"log"
 )
