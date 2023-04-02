@@ -24,15 +24,8 @@ func SetClient(newClient *ent.Client) {
 }
 
 func NewClient() (*ent.Client, error) {
-
-	fmt.Println(os.Getenv("DB_USERNAME"))
-	dbconf := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
-		os.Getenv("DB_USERNAME"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_PORT"), os.Getenv("DB_DATABASE"))
-
-	client, err := ent.Open("mysql", dbconf)
+	// Create an ent.Client.
+	client, err := ent.Open("mysql", os.Getenv("DSN"))
     if err != nil {
         log.Fatalf("failed opening connection to mysql: %v", err)
     }
