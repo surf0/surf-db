@@ -9,8 +9,8 @@ COPY . .
 # get dependencies.
 RUN go get -d -v
 
-RUN go build -o /go/bin/hello
+RUN go build -o /surfdb
 
-FROM scratch
-COPY --from=builder /go/bin/hello /go/bin/hello
-ENTRYPOINT ["/go/bin/hello"]
+EXPOSE 8080
+
+CMD [ "/surfdb" ]
