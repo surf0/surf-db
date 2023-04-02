@@ -26,6 +26,7 @@ func SetClient(newClient *ent.Client) {
 func NewClient() (*ent.Client, error) {
 	// Create an ent.Client.
 	client, err := ent.Open("mysql", os.Getenv("DSN"))
+
     if err != nil {
         log.Fatalf("failed opening connection to mysql: %v", err)
     }
