@@ -72,7 +72,7 @@ def get_new_sh():
 
     # get newest record in DB
     dh.mycursor.execute("SELECT id FROM records_sh ORDER BY timestamp DESC")
-    after = dh.mycursor.fetchone()[0].decode("utf-8")
+    after = dh.mycursor.fetchone()[0]
 
     print(after)
 
